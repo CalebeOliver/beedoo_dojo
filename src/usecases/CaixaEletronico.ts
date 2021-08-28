@@ -1,6 +1,8 @@
+import { InvalidValueError } from '../errors/invalid-value-error'
+
 export class CaixaEletronico {
     sacar(valor_saque: number) {
-        if (!Number.isInteger(valor_saque)) throw new Error('O valor fornecido deve ser um número inteiro')
+        if (!Number.isInteger(valor_saque)) throw new InvalidValueError()
 
         const notas_disponiveis = [100, 50, 20, 10];
 
