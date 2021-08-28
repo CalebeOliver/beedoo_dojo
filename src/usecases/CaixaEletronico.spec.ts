@@ -1,3 +1,4 @@
+import { InvalidValueError } from '../errors/invalid-value-error'
 import { CaixaEletronico } from './CaixaEletronico'
 
 describe('Teste Caixa Eletronico Dojo', () => {
@@ -5,7 +6,7 @@ describe('Teste Caixa Eletronico Dojo', () => {
     const sut = new CaixaEletronico()
 
     test('Deve lançar uma exceção caso o valor fornecido não seja um numero inteiro', () => {
-        expect(()=>sut.sacar(10.9)).toThrowError(new Error('O valor fornecido deve ser um número inteiro'))
+        expect(()=>sut.sacar(10.9)).toThrowError(new InvalidValueError())
     })
 
     test('ao sacar 10 deve retornar 10', () => {
