@@ -7,7 +7,7 @@ import { IFormatadorMoeda, IGaveta } from './protocolos'
 describe('Teste Caixa Eletronico Dojo', () => {
     const makeSut = () => {
         class FormatadorMoedaDuble implements IFormatadorMoeda {
-            formatar = (valor: number) => Intl.NumberFormat('pt-Br', { style: 'currency', currency: 'BRL' }).format(valor)
+            formatar = (valor: number) => `R$ ${valor},00`
         }
 
         class GavetaDuble implements IGaveta {
@@ -42,11 +42,11 @@ describe('Teste Caixa Eletronico Dojo', () => {
     })
 
     test('ao sacar 10 deve retornar 10', () => {
-        const { sut, formatadorMoedaDuble } = makeSut()
+        const { sut } = makeSut()
 
         const VALOR_SAQUE = 10
         const sacado = sut.sacar(VALOR_SAQUE)
-        expect(sacado).toEqual(`Entregar 1 nota de ${formatadorMoedaDuble.formatar(VALOR_SAQUE)}.`)
+        expect(sacado).toEqual(`Entregar 1 nota de R$ 10,00.`)
     })
 
     test('verifica se valor passado é multiplo de 10', () => {
@@ -56,21 +56,21 @@ describe('Teste Caixa Eletronico Dojo', () => {
     })
 
     test('dado que valor passado 110 deve retornar 1 nota de 100 e uma de 10', () => {
-        const { sut, formatadorMoedaDuble } = makeSut()
+        const { sut } = makeSut()
         const VALOR_SAQUE = 110
         const sacado = sut.sacar(VALOR_SAQUE)
-        expect(sacado).toEqual(`Entregar 1 nota de ${formatadorMoedaDuble.formatar(100)} e 1 nota de ${formatadorMoedaDuble.formatar(10)}.`)
+        expect(sacado).toEqual(`Entregar 1 nota de R$ 100,00 e 1 nota de R$ 10,00.`)
     })
 
     test('Ao sacar 30, Entregar 1 nota de R$20,00 e 1 nota de R$ 10,00.', () => {
-        const { sut, formatadorMoedaDuble } = makeSut()
+        const { sut } = makeSut()
 
-        expect(sut.sacar(30)).toEqual(`Entregar 1 nota de ${formatadorMoedaDuble.formatar(20)} e 1 nota de ${formatadorMoedaDuble.formatar(10)}.`)
+        expect(sut.sacar(30)).toEqual(`Entregar 1 nota de R$ 20,00 e 1 nota de R$ 10,00.`)
     })
 
     test('Ao sacar 80, Entregar 1 nota de R$50,00 1 nota de R$ 20,00 e 1 nota de R$ 10,00.', () => {
-        const { sut, formatadorMoedaDuble } = makeSut()
+        const { sut } = makeSut()
 
-        expect(sut.sacar(80)).toEqual(`Entregar 1 nota de ${formatadorMoedaDuble.formatar(50)}, 1 nota de ${formatadorMoedaDuble.formatar(20)} e 1 nota de ${formatadorMoedaDuble.formatar(10)}.`)
+        expect(sut.sacar(80)).toEqual(`Entregar 1 nota de R$ 50,00, 1 nota de R$ 20,00 e 1 nota de R$ 10,00.`)
     })
 })
