@@ -49,6 +49,9 @@ export class CaixaEletronico {
                 if (indice + 1 === notasValidas.length - 1) {
                     retornar = retornar + ' e '
                 }
+                if (indice + 1 < notasValidas.length - 1) {
+                    retornar += ', '
+                }
 
                 return retornar
             })
