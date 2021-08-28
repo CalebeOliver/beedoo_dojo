@@ -1,10 +1,14 @@
 import { InvalidValueError } from '../errors/invalid-value-error'
 import { UnavaiableValueError } from '../errors/unavaiable-value-error'
 import { CaixaEletronico } from './CaixaEletronico'
-import { IGaveta } from './protocolos'
+import { IFormatadorMoeda, IGaveta } from './protocolos'
 
 describe('Teste Caixa Eletronico Dojo', () => {
     const makeSut = () => {
+        class FormatadorMoedaDuble implements IFormatadorMoeda {
+            formatar = (valor: number) => Intl.NumberFormat('pt-Br', { style: 'currency', currency: 'BRL' }).format(valor)
+        }
+
         class GavetaDuble implements IGaveta {
             compartimentos = [
                 { valor: 100, quantidade: 2 },
@@ -13,14 +17,15 @@ describe('Teste Caixa Eletronico Dojo', () => {
                 { valor: 10, quantidade: 2 }
             ]
             recuperarTotalDisponivel = () => 360
-
+            recuperarQuantidadeDeNotasDisponiveis = () => this.compartimentos
         }
 
         const gavetaDuble = new GavetaDuble()
+        const formatadorMoedaDuble = new FormatadorMoedaDuble()
 
-        const sut = new CaixaEletronico(gavetaDuble)
+        const sut = new CaixaEletronico(gavetaDuble, formatadorMoedaDuble)
 
-        return { sut, gavetaDuble }
+        return { sut, gavetaDuble, formatadorMoedaDuble }
     }
 
     test('Deve lançar uma exceção caso o valor fornecido não seja um numero inteiro', () => {
@@ -36,11 +41,11 @@ describe('Teste Caixa Eletronico Dojo', () => {
     })
 
     test('ao sacar 10 deve retornar 10', () => {
-        const { sut } = makeSut()
+        const { sut, formatadorMoedaDuble } = makeSut()
 
         const VALOR_SAQUE = 10
         const sacado = sut.sacar(VALOR_SAQUE)
-        expect(sacado).toEqual(10)
+        expect(sacado).toEqual(`Entregar 1 nota de ${formatadorMoedaDuble.formatar(VALOR_SAQUE)}.`)
     })
 
     test('verifica se valor passado é multiplo de 10', () => {
@@ -51,10 +56,10 @@ describe('Teste Caixa Eletronico Dojo', () => {
     })
 
     test('dado que valor passado 110 deve retornar 1 nota de 100 e uma de 10', () => {
-        const { sut } = makeSut()
+        const { sut, formatadorMoedaDuble } = makeSut()
         const VALOR_SAQUE = 110
         const sacado = sut.sacar(VALOR_SAQUE)
-        expect(sacado).toEqual('Entregar 1 nota de R$100,00 e 1 nota de R$ 10,00.')
+        expect(sacado).toEqual(`Entregar 1 nota de ${formatadorMoedaDuble.formatar(100)} e 1 nota de ${formatadorMoedaDuble.formatar(10)}.`)
     })
 
 })
