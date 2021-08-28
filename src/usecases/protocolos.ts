@@ -1,5 +1,9 @@
+interface Compartimento {
+  valor: number, quantidade: number
+}
+
 export interface IGaveta {
-  compartimentos: { valor: number, quantidade: number }[]
+  compartimentos: Compartimento[]
   recuperarTotalDisponivel: () => number
   recuperarQuantidadeDeNotasDisponiveis: () => { valor: number, quantidade: number }[]
 }
