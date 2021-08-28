@@ -4,6 +4,10 @@ describe('Teste Caixa Eletronico Dojo', () => {
 
     const sut = new CaixaEletronico()
 
+    test('Deve lançar uma exceção caso o valor fornecido não seja um numero inteiro', () => {
+        expect(()=>sut.sacar(10.9)).toThrowError(new Error('O valor fornecido deve ser um número inteiro'))
+    })
+
     test('ao sacar 10 deve retornar 10', () => {
         const VALOR_SAQUE = 10;
         const sacado = sut.sacar(VALOR_SAQUE);
