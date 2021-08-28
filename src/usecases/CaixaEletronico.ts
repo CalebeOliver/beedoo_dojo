@@ -1,5 +1,6 @@
 import { UnavaiableValueError } from '../errors/unavaiable-value-error'
 import { InvalidValueError } from '../errors/invalid-value-error'
+import { UnavaiableNotesForValueError } from '../errors/unavaiable-notes-for-value-error'
 import { IGaveta, IFormatadorMoeda } from './protocolos';
 export class CaixaEletronico {
     constructor(private gaveta: IGaveta, private formatadorMoeda: IFormatadorMoeda) { }
@@ -31,7 +32,7 @@ export class CaixaEletronico {
         const resultAmount = result.map((note) => note.valor * note.quantidade).reduce((previous, current) => previous + current)
 
         if (resultAmount < valor_saque) {
-            return ("Ná há notas disponíveis para o valor informado.")
+            throw new UnavaiableNotesForValueError()
         }
 
         const notasValidas = result.filter(({ quantidade }) => quantidade > 0)

@@ -1,4 +1,5 @@
 import { InvalidValueError } from '../errors/invalid-value-error'
+import { UnavaiableNotesForValueError } from '../errors/unavaiable-notes-for-value-error'
 import { UnavaiableValueError } from '../errors/unavaiable-value-error'
 import { CaixaEletronico } from './CaixaEletronico'
 import { IFormatadorMoeda, IGaveta } from './protocolos'
@@ -51,8 +52,7 @@ describe('Teste Caixa Eletronico Dojo', () => {
     test('verifica se valor passado é multiplo de 10', () => {
         const { sut } = makeSut()
         const VALOR_SAQUE = 15
-        const sacado = sut.sacar(VALOR_SAQUE)
-        expect(sacado).toEqual('Ná há notas disponíveis para o valor informado.')
+        expect(() => sut.sacar(VALOR_SAQUE)).toThrowError(new UnavaiableNotesForValueError())
     })
 
     test('dado que valor passado 110 deve retornar 1 nota de 100 e uma de 10', () => {
