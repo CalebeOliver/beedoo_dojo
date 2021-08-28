@@ -1,8 +1,17 @@
 import { InvalidValueError } from '../errors/invalid-value-error'
+import { IGaveta } from './protocolos';
 
 export class CaixaEletronico {
+    constructor(private gaveta: IGaveta) { }
+
     sacar(valor_saque: number) {
         if (!Number.isInteger(valor_saque)) throw new InvalidValueError()
+
+        const totalDisponivel = this.gaveta.recuperarTotalDisponivel()
+
+        if (valor_saque > totalDisponivel) {
+            throw new Error('O valor solicitado não está disponível')
+        }
 
         const notas_disponiveis = [100, 50, 20, 10];
 
@@ -19,7 +28,7 @@ export class CaixaEletronico {
             while (valor_saque < nota) {
 
             }
-        }) 
+        })
 
         return 'Entregar 1 nota de R$100,00 e 1 nota de R$ 10,00.';
     }
