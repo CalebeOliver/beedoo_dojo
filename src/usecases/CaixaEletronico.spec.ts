@@ -62,15 +62,15 @@ describe('Teste Caixa Eletronico Dojo', () => {
         expect(sacado).toEqual(`Entregar 1 nota de ${formatadorMoedaDuble.formatar(100)} e 1 nota de ${formatadorMoedaDuble.formatar(10)}.`)
     })
 
-    test('Ao sacar 30, Entregar 1 nota de R$20,00 e 1 nota de R$ 10,00.',()=>{
-        const {sut, formatadorMoedaDuble} = makeSut()
+    test('Ao sacar 30, Entregar 1 nota de R$20,00 e 1 nota de R$ 10,00.', () => {
+        const { sut, formatadorMoedaDuble } = makeSut()
 
         expect(sut.sacar(30)).toEqual(`Entregar 1 nota de ${formatadorMoedaDuble.formatar(20)} e 1 nota de ${formatadorMoedaDuble.formatar(10)}.`)
     })
-})
 
-test('Ao sacar 80, Entregar 1 nota de R$50,00 1 nota de R$ 20,00 e 1 nota de R$ 10,00.',()=>{
-    const {sut, formatadorMoedaDuble} = makeSut()
+    test('Ao sacar 80, Entregar 1 nota de R$50,00 1 nota de R$ 20,00 e 1 nota de R$ 10,00.', () => {
+        const { sut, formatadorMoedaDuble } = makeSut()
 
-    expect(sut.sacar(80)).toEqual(`Entregar 1 nota de ${formatadorMoedaDuble.formatar(50)}, 1 nota de ${formatadorMoedaDuble.formatar(20)} e 1 nota de ${formatadorMoedaDuble.formatar(10)}.`)
+        expect(sut.sacar(80)).toEqual(`Entregar 1 nota de ${formatadorMoedaDuble.formatar(50)}, 1 nota de ${formatadorMoedaDuble.formatar(20)} e 1 nota de ${formatadorMoedaDuble.formatar(10)}.`)
+    })
 })
