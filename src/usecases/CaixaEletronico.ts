@@ -1,9 +1,8 @@
 import { UnavaiableValueError } from '../errors/unavaiable-value-error'
 import { InvalidValueError } from '../errors/invalid-value-error'
-import { IGaveta } from './protocolos';
-
+import { IGaveta, IFormatadorMoeda } from './protocolos';
 export class CaixaEletronico {
-    constructor(private gaveta: IGaveta) { }
+    constructor(private gaveta: IGaveta, private formatadorMoeda: IFormatadorMoeda) { }
 
     sacar(valor_saque: number) {
         if (!Number.isInteger(valor_saque)) throw new InvalidValueError()
@@ -14,24 +13,46 @@ export class CaixaEletronico {
             throw new UnavaiableValueError()
         }
 
-        const notas_disponiveis = [100, 50, 20, 10];
+        let valorRestante = valor_saque
 
-        if (notas_disponiveis.includes(valor_saque)) {
-            return valor_saque;
+        const result = this.gaveta.recuperarQuantidadeDeNotasDisponiveis()
+            .map(nota => {
+                let quantidade = Math.trunc(valorRestante / nota.valor)
+
+                if (quantidade > nota.quantidade) {
+                    quantidade = nota.quantidade
+                }
+
+                valorRestante -= nota.valor * quantidade
+
+                return ({ valor: nota.valor, quantidade })
+            });
+
+        const resultAmount = result.map((note) => note.valor * note.quantidade).reduce((previous, current) => previous + current)
+
+        if (resultAmount < valor_saque) {
+            return ("Ná há notas disponíveis para o valor informado.")
         }
 
-        if (valor_saque % 10 !== 0) {
-            return 'Ná há notas disponíveis para o valor informado.';
-        }
+        const notasValidas = result.filter(({ quantidade }) => quantidade > 0)
 
-        let notas = []
-        notas_disponiveis.map(nota => {
-            while (valor_saque < nota) {
+        return notasValidas
+            .map(({ valor, quantidade }, indice) => {
+                let retornar = `${quantidade} nota${quantidade > 1 ? 's' : ''} de ${this.formatadorMoeda.formatar(valor)}`
 
-            }
-        })
+                if (indice === 0) {
+                    retornar = "Entregar " + retornar
+                }
+                if (indice + 1 === notasValidas.length) {
+                    retornar = retornar + '.'
+                }
+                if (indice + 1 === notasValidas.length - 1) {
+                    retornar = retornar + ' e '
+                }
 
-        return 'Entregar 1 nota de R$100,00 e 1 nota de R$ 10,00.';
+                return retornar
+            })
+            .join('')
     }
 }
 
