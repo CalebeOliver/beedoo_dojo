@@ -1,4 +1,5 @@
 import { InvalidValueError } from '../errors/invalid-value-error'
+import { UnavaiableValueError } from '../errors/unavaiable-value-error'
 import { CaixaEletronico } from './CaixaEletronico'
 import { IGaveta } from './protocolos'
 
@@ -31,7 +32,7 @@ describe('Teste Caixa Eletronico Dojo', () => {
         const { sut, gavetaDuble } = makeSut()
         jest.spyOn(gavetaDuble, 'recuperarTotalDisponivel').mockReturnValueOnce(0)
 
-        expect(() => sut.sacar(1)).toThrowError(new Error('O valor solicitado não está disponível'))
+        expect(() => sut.sacar(1)).toThrowError(new UnavaiableValueError())
     })
 
     test('ao sacar 10 deve retornar 10', () => {

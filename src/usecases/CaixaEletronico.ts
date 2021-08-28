@@ -1,3 +1,4 @@
+import { UnavaiableValueError } from '../errors/unavaiable-value-error'
 import { InvalidValueError } from '../errors/invalid-value-error'
 import { IGaveta } from './protocolos';
 
@@ -10,7 +11,7 @@ export class CaixaEletronico {
         const totalDisponivel = this.gaveta.recuperarTotalDisponivel()
 
         if (valor_saque > totalDisponivel) {
-            throw new Error('O valor solicitado não está disponível')
+            throw new UnavaiableValueError()
         }
 
         const notas_disponiveis = [100, 50, 20, 10];
