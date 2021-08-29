@@ -1,4 +1,4 @@
-import { FormatadorMoeda } from '../utils/formatar-moeda'
+import { FormatadorMoeda } from '../utils/FormatadorMoeda'
 import { CaixaEletronico } from "./CaixaEletronico"
 import { Teclado } from '../utils/teclado'
 import { Gaveta } from "./Gaveta"

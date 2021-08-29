@@ -1,7 +1,6 @@
-import { UnavaiableValueError } from '../errors/unavaiable-value-error'
-import { InvalidValueError } from '../errors/invalid-value-error'
-import { UnavaiableNotesForValueError } from '../errors/unavaiable-notes-for-value-error'
-import { IGaveta, IFormatadorMoeda } from './protocolos';
+import { UnavaiableValueError, InvalidValueError, UnavaiableNotesForValueError } from '../errors'
+import { IGaveta, IFormatadorMoeda } from './protocols';
+
 export class CaixaEletronico {
     constructor(private gaveta: IGaveta, private formatadorMoeda: IFormatadorMoeda) { }
 

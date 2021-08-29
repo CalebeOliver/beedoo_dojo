@@ -1,4 +1,4 @@
-import { Compartimento, IGaveta } from "./protocolos";
+import { Compartimento, IGaveta } from "./protocols";
 
 export class Gaveta implements IGaveta {
   compartimentos: Compartimento[];

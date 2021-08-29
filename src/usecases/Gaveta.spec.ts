@@ -1,5 +1,5 @@
 import { Gaveta } from "./Gaveta"
-import { Compartimento } from "./protocolos"
+import { Compartimento } from "./protocols"
 
 describe('Gaveta', () => {
   const criarSut = () => {

@@ -1,4 +1,4 @@
-import { FormatadorMoeda } from "./formatar-moeda"
+import { FormatadorMoeda } from "./FormatadorMoeda"
 
 describe('formatador de moedas', () => {
   test('deve retornar R$ 10,00 quando o valor 10 for fornecido', () => {

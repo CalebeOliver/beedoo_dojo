@@ -1,8 +1,6 @@
-import { InvalidValueError } from '../errors/invalid-value-error'
-import { UnavaiableNotesForValueError } from '../errors/unavaiable-notes-for-value-error'
-import { UnavaiableValueError } from '../errors/unavaiable-value-error'
+import { InvalidValueError, UnavaiableNotesForValueError, UnavaiableValueError } from '../errors'
+import { Compartimento, IFormatadorMoeda, IGaveta } from './protocols'
 import { CaixaEletronico } from './CaixaEletronico'
-import { Compartimento, IFormatadorMoeda, IGaveta } from './protocolos'
 
 describe('Teste Caixa Eletronico Dojo', () => {
     const criarFormatadorMoedaDuble = () => {
