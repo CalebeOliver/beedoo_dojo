@@ -37,6 +37,8 @@ export class CaixaEletronico {
 
         const notasValidas = result.filter(({ quantidade }) => quantidade > 0)
 
+        notasValidas.forEach(item => this.gaveta.removerNotas(item))
+
         return notasValidas
             .map(({ valor, quantidade }, indice) => {
                 let retornar = `${quantidade} nota${quantidade > 1 ? 's' : ''} de ${this.formatadorMoeda.formatar(valor)}`
