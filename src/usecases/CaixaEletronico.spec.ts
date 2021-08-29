@@ -2,14 +2,18 @@ import { InvalidValueError } from '../errors/invalid-value-error'
 import { UnavaiableNotesForValueError } from '../errors/unavaiable-notes-for-value-error'
 import { UnavaiableValueError } from '../errors/unavaiable-value-error'
 import { CaixaEletronico } from './CaixaEletronico'
-import { IFormatadorMoeda, IGaveta } from './protocolos'
+import { Compartimento, IFormatadorMoeda, IGaveta } from './protocolos'
 
 describe('Teste Caixa Eletronico Dojo', () => {
-    const makeSut = () => {
+    const criarFormatadorMoedaDuble = () => {
         class FormatadorMoedaDuble implements IFormatadorMoeda {
             formatar = (valor: number) => `R$ ${valor},00`
         }
 
+        return new FormatadorMoedaDuble()
+    }
+
+    const criarGavetaDuble = () => {
         class GavetaDuble implements IGaveta {
             compartimentos = [
                 { valor: 100, quantidade: 2 },
@@ -18,11 +22,16 @@ describe('Teste Caixa Eletronico Dojo', () => {
                 { valor: 10, quantidade: 2 }
             ]
             recuperarTotalDisponivel = () => 360
+            removerNotas = (notas: Compartimento) => null
             recuperarQuantidadeDeNotasDisponiveis = () => this.compartimentos
         }
 
-        const gavetaDuble = new GavetaDuble()
-        const formatadorMoedaDuble = new FormatadorMoedaDuble()
+        return new GavetaDuble()
+    }
+
+    const makeSut = () => {
+        const gavetaDuble = criarGavetaDuble()
+        const formatadorMoedaDuble = criarFormatadorMoedaDuble()
 
         const sut = new CaixaEletronico(gavetaDuble, formatadorMoedaDuble)
 
@@ -72,5 +81,18 @@ describe('Teste Caixa Eletronico Dojo', () => {
         const { sut } = makeSut()
 
         expect(sut.sacar(80)).toEqual(`Entregar 1 nota de R$ 50,00, 1 nota de R$ 20,00 e 1 nota de R$ 10,00.`)
+    })
+
+    test('Ao sacar 80, removerNotas deve ser chamado corretamente 3x com os valor 50, 20 e 10', () => {
+        const { sut, gavetaDuble } = makeSut()
+        const spied = jest.spyOn(gavetaDuble, 'removerNotas')
+
+        sut.sacar(80)
+
+        expect(spied).toBeCalledTimes(3)
+        expect(spied).toHaveBeenCalledWith({ valor: 50, quantidade: 1 })
+        expect(spied).toHaveBeenCalledWith({ valor: 20, quantidade: 1 })
+        expect(spied).toHaveBeenCalledWith({ valor: 10, quantidade: 1 })
+
     })
 })
